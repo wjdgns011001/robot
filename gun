@@ -1,0 +1,74 @@
+int melody[] = {       //music
+  262, 196, 196, 220, 196, 247, 262
+};
+int noteDurations[] = {     //music 
+  4, 8, 8, 4, 4, 4, 4, 4
+};
+//segment 0~9
+int order[10][8]={{1,1,1,1,1,0,0,0},{1,1,1,1,1,1,1,0},{1,1,0,1,1,0,0,0},{0,1,1,1,1,1,1,0},{0,1,1,1,1,1,0,0},{1,1,1,0,1,0,0,0},{1,0,1,1,1,1,0,0},{1,0,1,1,0,1,1,0},{1,0,0,0,1,0,0,0},{1,1,0,1,1,1,1,0}};
+int i=0;  // cycle 
+void setup(){
+pinMode(2,OUTPUT);
+pinMode(3,OUTPUT);
+pinMode(4,OUTPUT);
+pinMode(5,OUTPUT);
+pinMode(6,OUTPUT);
+pinMode(7,OUTPUT);
+pinMode(8,OUTPUT);
+pinMode(9,OUTPUT);
+//segment 
+ pinMode(10,OUTPUT); //laser
+ pinMode(12,INPUT);  //button
+ pinMode(11,OUTPUT);  //buser
+ }
+void loop(){
+  if(i==0){   //when restart the game segment mark 0
+digitalWrite(2,1);
+digitalWrite(3,1);
+digitalWrite(4,0);
+digitalWrite(5,1);
+digitalWrite(6,1);
+digitalWrite(7,1);
+digitalWrite(8,1);
+digitalWrite(9,0);    
+}
+  if(digitalRead(12)==HIGH){  //when pushed button
+    digitalWrite(10,HIGH);  //operate laser
+    number(order[i][0],order[i][1],order[i][2],order[i][3],order[i][4],order[i][5],order[i][6],order[i][7]);  //mark remaining bullet
+    delay(200);
+    }  
+  digitalWrite(10,LOW);   //stop perate laser
+     if(i==10){// when over bullet
+//palying music
+      for (int thisNote = 0; thisNote < 8; thisNote++) {
+    int noteDuration = 1000 / noteDurations[thisNote];
+    tone(11, melody[thisNote], noteDuration);
+    int pauseBetweenNotes = noteDuration * 1.30;
+    if(thisNote==6){
+      delay(1000);
+      }
+    delay(pauseBetweenNotes);
+    noTone(11);
+  }
+      i=0;
+ }
+ digitalWrite(11,LOW);  //stop music
+  } 
+//mark each remaining bullet
+void number(int a,int b,int c,int d,int e, int f,int g, int h){
+digitalWrite(2,a);
+digitalWrite(3,b);
+digitalWrite(4,c);
+digitalWrite(5,d);
+digitalWrite(6,e);
+digitalWrite(7,f);
+digitalWrite(8,g);
+digitalWrite(9,h);
+//sound of shooting
+tone(11,100,80);  
+delay(100);
+tone(11,500,80);
+delay(100);
+tone(11,100,80);
+i++;
+}
